@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-interface Song {
-  id: number;
-  name: string;
-}
+import { Song } from './types/Song';
 
 const App: React.FC = () => {
   const [songs, setSongs] = useState<Song[]>([]);
