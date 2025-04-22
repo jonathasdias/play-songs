@@ -63,7 +63,7 @@ const InputUpload: React.FC<InputUploadProps> = ({ fetchSongs, setUploading, upl
       multiple
       onChange={handleUpload}
       disabled={uploading}
-      className="p-2 max-w-80 min-w-64 border text-sm sm:text-base border-gray-600 rounded-md cursor-pointer"
+      className="p-2 max-w-80 min-w-64 border text-base border-gray-600 rounded-md cursor-pointer"
     />
   );
 };
