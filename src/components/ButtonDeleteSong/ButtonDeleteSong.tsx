@@ -37,7 +37,7 @@ const ButtonDeleteSong: React.FC<ButtonDeleteSongProps> = ({ fetchSongs, song })
   return (
     <button
       onClick={() => deleteSong(song)}
-      className="flex flex-nowrap gap-x-1 text-sm"
+      className="flex flex-nowrap gap-x-1 text-sm rounded-lg hover:outline-2 transition-all duration-100 ease-linear py-[0.6em] px-[1.2em] bg-[#1a1a1a]"
     >
       <span>❌</span> Deletar
     </button>
