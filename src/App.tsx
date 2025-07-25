@@ -1,9 +1,11 @@
-import React from 'react';
-import { Outlet } from 'react-router';
+import React from "react";
+import { Outlet } from "react-router";
 
 const App: React.FC = () => {
   return (
-    <Outlet/>
+    <>
+      <Outlet />
+    </>
   );
 };
 

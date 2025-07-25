@@ -1,99 +1,47 @@
-import { useState, useEffect } from "react";
-import { Song } from "../../types/Song";
-import { supabase } from "../../lib/supabase";
-import InputUpload from "../../components/InputUpload";
 import Loading from "../../components/Loading";
-import ButtonDeleteSong from "../../components/ButtonDeleteSong";
-import { useNavigate } from "react-router";
+import ButtonAddAlbum from "@/components/ButtonAddAlbum";
+import CardAlbum from "@/components/CardAlbum";
+import { useAllAlbums } from "@/hooks/useAllAlbums";
 
-const Dashboard = () => {
-  const [songs, setSongs] = useState<Song[]>([]);
-  const [uploading, setUploading] = useState<boolean>(false);
-  const [loadingDatas, setLoadingDatas] = useState<boolean>(true);
+const Dashboard: React.FC = () => {
+  const { data: albums, isLoading, error } = useAllAlbums();
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchAuth();
-    fetchSongs();
-  }, []);
-
-  const fetchAuth = async () => {
-    const { data: userData } = await supabase.auth.getUser();
-    const user = userData.user;
-    if (!user) {
-      navigate("/");
-      return;
-    }
-  };
-
-  const fetchSongs = async () => {
-    setLoadingDatas(true);
-    const { data, error } = await supabase.from("songs").select("*");
-    if (error) {
-      console.error("Erro ao buscar músicas:", error);
-    } else {
-      setLoadingDatas(false);
-      setSongs(data || []);
-    }
-  };
-
-  const logout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Erro ao fazer logout:", error.message);
-    } else {
-      navigate("/");
-    }
-  };
+  if (error) {
+    alert("Erro ao buscar os albums: " + error);
+    console.error("Erro ao buscar os albums:", error);
+    return;
+  }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-2 sm:p-6">
-      <button
-        onClick={logout}
-        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition w-full mt-4"
-      >
-        Sair da Conta
-      </button>
+    <div className="min-h-screen text-white p-2 sm:p-6">
       <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-center mb-8">
-        🎵 Reprodutor de Músicas
+        🎵 Albums
       </h1>
 
-      <div className="text-center mb-10">
-        <InputUpload
-          fetchSongs={fetchSongs}
-          setUploading={setUploading}
-          uploading={uploading}
-        />
-      </div>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <section>
+          <div className="flex justify-between items-center border-b border-gray-400 p-2">
+            <p>
+              <b>Albums:</b> {albums?.length}
+            </p>
 
-      {uploading && <Loading />}
+            <ButtonAddAlbum />
+          </div>
 
-      <section>
-        {loadingDatas && <Loading />}
-
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mx-auto">
-          {songs.map((song) => (
-            <li
-              key={song.id}
-              className="bg-gray-800 rounded-lg shadow p-2 sm:p-4 flex justify-between items-center"
-            >
-              <div className="flex-1">
-                <div className="flex justify-between items-center gap-2 mb-4">
-                  <p className="text-sm font-semibold mb-2">{song.name}</p>
-
-                  <ButtonDeleteSong fetchSongs={fetchSongs} song={song} />
-                </div>
-
-                <audio controls className="w-full text-[2px]">
-                  <source src={song.url} type="audio/mpeg" />
-                  Seu navegador não suporta o player de áudio.
-                </audio>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mx-auto p-4">
+            {albums?.length === 0 && (
+              <p className="text-4xl text-gray-400 text-center font-extrabold p-4">
+                Você não possui nenhum album.
+              </p>
+            )}
+            {albums?.map((album, index) => (
+              <CardAlbum key={album.id} album={album} index={index + 1} />
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 };
