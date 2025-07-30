@@ -1,12 +1,21 @@
+import { useRef } from "react";
 import { supabase } from "../../lib/supabase";
+import { Button } from "../ui/button";
 
 interface InputUploadProps {
-    setUploading: React.Dispatch<React.SetStateAction<boolean>>;
-    fetchSongs: () => Promise<void>;
-    uploading: boolean;
+  setUploading: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchSongs: () => Promise<void>;
+  uploading: boolean;
 }
 
-const InputUpload: React.FC<InputUploadProps> = ({ fetchSongs, setUploading, uploading }) => {
+type inputElement = HTMLInputElement;
+
+const InputUpload: React.FC<InputUploadProps> = ({
+  fetchSongs,
+  setUploading,
+  uploading,
+}) => {
+  const inputRef = useRef<inputElement>(null);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -57,14 +66,26 @@ const InputUpload: React.FC<InputUploadProps> = ({ fetchSongs, setUploading, upl
   };
 
   return (
-    <input
-      type="file"
-      accept="audio/*"
-      multiple
-      onChange={handleUpload}
-      disabled={uploading}
-      className="p-2 max-w-80 min-w-64 border text-base border-gray-600 rounded-md cursor-pointer"
-    />
+    <>
+      <Button
+        className="py-6 px-6 text-xl bg-white text-black"
+        title="Adicionar Música"
+        aria-label="Adicionar Música"
+        variant="secondary"
+        onClick={() => inputRef.current?.click()}
+      >
+        + Adicionar Música
+      </Button>
+      <input
+        type="file"
+        ref={inputRef}
+        accept="audio/*"
+        multiple
+        onChange={handleUpload}
+        disabled={uploading}
+        className="hidden"
+      />
+    </>
   );
 };
 

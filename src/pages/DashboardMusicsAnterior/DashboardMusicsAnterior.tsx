@@ -39,43 +39,13 @@ const DashboardMusicsAnterior = () => {
     }
   };
 
-  const logout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      alert("Erro ao fazer logout: " + error.message);
-      console.error("Erro ao fazer logout:", error.message);
-    } else {
-      navigate("/");
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-900 text-white p-2 sm:p-6">
-      {/* colocar um player pequeno fixo colado no bottom do site. apenas na página inicial. */}
-
-      <div className="flex flex-between">
-        <button
-          onClick={logout}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition w-[text-content]"
-        >
-          Sair da Conta
-        </button>
-
-        <button className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition w-[text-content]">
-          Playlist
-        </button>
-
-        <button className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 transition w-[text-content]">
-          Criar album &#10009;
-        </button>
-      </div>
-
       <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-center mb-8">
-        🎵 Albums
+        🎵 Minhas Músicas
       </h1>
 
       <div className="text-center mb-10">
-        {/* melhorar esse botão de upload, para um botão branco com um mais ou seta para baixo preto ou azul ao lado  */}
         <InputUpload
           fetchSongs={fetchSongs}
           setUploading={setUploading}

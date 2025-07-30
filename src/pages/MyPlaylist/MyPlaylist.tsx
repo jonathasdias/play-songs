@@ -1,12 +1,21 @@
+import { FaArrowLeftLong } from "react-icons/fa6";
+
 const MyPlaylist: React.FC = () => {
   return (
-    <main>
+    <main className="text-white p-4">
       <div>
-        {/* Botão LINK de voltar para dashboard */}
+        <FaArrowLeftLong
+          className="mb-6 text-3xl cursor-pointer"
+          title="Voltar para página anterior"
+          onClick={() => window.history.back()}
+        />
 
         {/* colocar botõa para abrir lista de músicas adicionadas na playlist, com funcionalidade
-                 de arastar para a ordem que o usuário desejar */}
-        {/* Esse botão será um componente que será utilizado em dashboard também. pois pegara as musicas do localstorage. */}
+         de arastar para a ordem que o usuário desejar */}
+        {/* essa lista de musicas deve marcar a musica que em reprodução. */}
+        {/* criar um player igual ao gerenciador de músicas */}
+        {/* Esse botão será um componente que será utilizado em dashboard também. */}
+
         <button>Playlist</button>
         <ul>
           <li>

@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import MyPlaylist from "./pages/MyPlaylist";
 import MyAlbum from "./pages/MyAlbum/MyAlbum.tsx";
 import PrivatePage from "./auth/PrivatePage.tsx";
+import DashboardMusicsAnterior from "./pages/DashboardMusicsAnterior/DashboardMusicsAnterior.tsx";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/playlist",
         element: <PrivatePage Component={<MyPlaylist />} />,
+      },
+      {
+        path: "/dashboarded",
+        element: <PrivatePage Component={<DashboardMusicsAnterior />} />,
       },
     ],
   },
