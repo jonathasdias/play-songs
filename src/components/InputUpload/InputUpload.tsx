@@ -34,6 +34,7 @@ const InputUpload: React.FC<InputUploadProps> = ({
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-zA-Z0-9._-]/g, "");
+
       const filePath: string = `music/${fileName}`;
 
       const { error: uploadError } = await supabase.storage

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { FaCircleArrowDown } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
+import UploadSongForm from "@/components/UploadSongForm";
 
 type PathParams = {
   albumId: string;
@@ -54,6 +55,8 @@ const MyAlbum: React.FC = () => {
 
       <div className="mb-6 border-b p-2 flex justify-between items-center">
         <p>Músicas: {songs?.length}</p>
+
+        {albumId && <UploadSongForm albumId={albumId} />}
       </div>
 
       {songs?.length === 0 ? (
