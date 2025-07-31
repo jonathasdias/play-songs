@@ -2,12 +2,13 @@ import Loading from "../../components/Loading";
 import ButtonAddAlbum from "@/components/ButtonAddAlbum";
 import CardAlbum from "@/components/CardAlbum";
 import { useAllAlbums } from "@/hooks/useAllAlbums";
+import { toast } from "react-toastify";
 
 const Dashboard: React.FC = () => {
   const { data: albums, isLoading, error } = useAllAlbums();
 
   if (error) {
-    alert("Erro ao buscar os albums: " + error);
+    toast.error("Erro ao buscar os albums: " + error);
     console.error("Erro ao buscar os albums:", error);
     return;
   }

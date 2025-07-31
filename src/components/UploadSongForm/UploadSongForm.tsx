@@ -11,6 +11,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+import { toast } from "react-toastify";
+
 interface UploadSongFormProps {
   albumId: string;
 }
@@ -23,7 +25,7 @@ const UploadSongForm = ({ albumId }: UploadSongFormProps) => {
     let successCount: number = 0;
 
     if (!files || files.length === 0) {
-      alert("Selecione ao menos uma música.");
+      toast.info("Selecione ao menos uma música.");
       return;
     }
 
@@ -31,7 +33,7 @@ const UploadSongForm = ({ albumId }: UploadSongFormProps) => {
 
     for (const file of Array.from(files)) {
       if (!file.type.startsWith("audio/")) {
-        alert(`Arquivo ignorado: ${file.name} não é um áudio.`);
+        toast.info(`Arquivo ignorado: ${file.name} não é um áudio.`);
         console.warn(`Arquivo ignorado: ${file.name} não é um áudio.`);
         continue;
       }
@@ -44,7 +46,6 @@ const UploadSongForm = ({ albumId }: UploadSongFormProps) => {
 
       const filePath: string = `music/${fileName}`;
 
-      // Verificar duplicata no banco (opcional, pode ser só por nome ou nome+álbum)
       const { data: existingSong } = await supabase
         .from("songs")
         .select("id")
@@ -53,26 +54,24 @@ const UploadSongForm = ({ albumId }: UploadSongFormProps) => {
         .maybeSingle();
 
       if (existingSong) {
-        alert(`Música já existe.`);
+        toast.error("Música já existe.");
         console.warn(`Música duplicada ignorada: ${file.name}`);
         continue;
       }
 
-      // Upload para o Supabase Storage
       const { error: uploadError } = await supabase.storage
         .from("songs")
         .upload(filePath, file);
 
       if (uploadError) {
-        alert(`Erro ao enviar ${file.name}: ${uploadError}`);
+        toast.error(`Erro ao enviar ${file.name}: ${uploadError}`);
         console.error(`Erro ao enviar ${file.name}:`, uploadError);
         continue;
       } else {
-        alert(`Upload efetuado com sucesso  ${file.name}`);
+        toast.success(`Upload efetuado com sucesso  ${file.name}`);
         console.log(`Upload efetuado com sucesso  ${file.name}`);
       }
 
-      // Obter URL pública
       const { data: publicUrlData } = supabase.storage
         .from("songs")
         .getPublicUrl(filePath);
@@ -87,14 +86,14 @@ const UploadSongForm = ({ albumId }: UploadSongFormProps) => {
       });
 
       if (insertError) {
-        alert(`Erro ao salvar no banco: ${insertError}`);
+        toast.error(`Erro ao salvar no banco: ${insertError}`);
         console.error("Erro ao salvar no banco:", insertError);
       } else {
         successCount++;
       }
     }
 
-    alert(`Músicas enviadas com sucesso: ${successCount}`);
+    toast.info(`Músicas enviadas com sucesso: ${successCount}`);
 
     setIsLoading(false);
     setFiles(null);

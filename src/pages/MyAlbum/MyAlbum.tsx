@@ -8,6 +8,9 @@ import { FaCircleArrowDown } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import UploadSongForm from "@/components/UploadSongForm";
+import { useDeleteSong } from "@/hooks/useDeleteSong";
+import { Song } from "@/types/Song";
+import { toast } from "react-toastify";
 
 type PathParams = {
   albumId: string;
@@ -21,20 +24,29 @@ const MyAlbum: React.FC = () => {
 
   const { data: songs, error: songsError } = useSongsByAlbumId(albumId!);
 
+  const { mutate: deleteSong, isPending } = useDeleteSong();
+
   const [indexSongs, setIndexSong] = useState<number>(0);
 
   if (albumError) {
-    alert("Erro ao buscar álbum");
+    toast.error("Erro ao buscar álbum");
     console.error("Erro ao buscar álbum:", albumError);
     return;
   }
 
   if (songsError) {
-    alert("Músicas relacionadas a esse não foram encontradas.");
+    toast.error("Músicas relacionadas a esse não foram encontradas.");
     console.error("Erro ao buscar músicas:", songsError);
   }
 
   if (!album) return <p>Álbum não encontrado.</p>;
+
+  const handleClick = (song: Song) => {
+    const confirm = window.confirm(`Deseja deletar a música "${song.name}"?`);
+    if (confirm) {
+      deleteSong(song);
+    }
+  };
 
   return (
     <div className="p-4 pb-64 text-white">
@@ -66,7 +78,9 @@ const MyAlbum: React.FC = () => {
           {songs?.map((song, index) => (
             <li
               key={song.id}
-              className="border-2 px-2 py-4 rounded-lg shadow flex flex-col justify-between gap-y-2"
+              className={`${
+                isPending && "opacity-5"
+              } border-2 px-2 py-4 rounded-lg shadow flex flex-col justify-between gap-y-2`}
             >
               <img
                 src={`https://picsum.photos/600/300?song=${index}`}
@@ -95,6 +109,7 @@ const MyAlbum: React.FC = () => {
                   className="size-10 text-2xl grid place-items-center rounded-full text-black bg-destructive"
                   title="Deletar música"
                   aria-label="Deletar música"
+                  onClick={() => handleClick(song)}
                 >
                   <MdDelete />
                 </button>

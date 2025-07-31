@@ -71,7 +71,7 @@ const DashboardMusicsAnterior = () => {
                 <div className="flex justify-between items-center gap-2 mb-4">
                   <p className="text-sm font-semibold mb-2">{song.name}</p>
 
-                  <ButtonDeleteSong fetchSongs={fetchSongs} song={song} />
+                  <ButtonDeleteSong song={song} />
                 </div>
 
                 <audio controls className="w-full text-[2px]">
