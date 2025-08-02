@@ -1,12 +1,7 @@
 import formatSeconds from "@/utils/formatSeconds";
 import { useRef, useState } from "react";
 import { FaPause, FaPlay } from "react-icons/fa";
-import {
-  FaRepeat,
-  // FaShuffle,
-  FaVolumeHigh,
-  FaVolumeXmark,
-} from "react-icons/fa6";
+import { FaRepeat, FaVolumeHigh, FaVolumeXmark } from "react-icons/fa6";
 import { IoPlaySkipBack, IoPlaySkipForwardSharp } from "react-icons/io5";
 import { Song } from "@/types/Song";
 import ButtonMoreOptions from "../ButtonMoreOptions";
@@ -51,11 +46,6 @@ const Miniplayer: React.FC<MiniplayerPropsTypes> = ({
     }
   }
 
-  function updateProgressSong(e: AudioEvent) {
-    const audio = e.currentTarget;
-    setCurrentTime(audio.currentTime);
-  }
-
   function updateDurationTotal(e: AudioEvent) {
     const audio = e.currentTarget;
     setDuration(audio.duration);
@@ -66,7 +56,13 @@ const Miniplayer: React.FC<MiniplayerPropsTypes> = ({
       playSong();
       return;
     }
+    pauseSong();
     nextSong();
+  }
+
+  function updateProgressSong(e: AudioEvent) {
+    const audio = e.currentTarget;
+    setCurrentTime(audio.currentTime);
   }
 
   function progressSong(e: InputElement) {
@@ -95,20 +91,19 @@ const Miniplayer: React.FC<MiniplayerPropsTypes> = ({
   function nextSong() {
     if (indexSong < songs.length - 1) {
       setIndexSong((prev) => prev + 1);
-      pauseSong();
       playSong();
     }
   }
+
   function prevSong() {
     if (indexSong > 0) {
       setIndexSong((prev) => prev - 1);
-      pauseSong();
       playSong();
     }
   }
 
   return (
-    <div className="border-t-2 bg-gray-950 fixed bottom-0 left-0 right-0 z-10 p-4 flex flex-col gap-y-4">
+    <div className="border-t-2 bg-gray-950 fixed bottom-0 left-0 right-0 z-10 p-2 flex flex-col gap-y-4">
       {songs.length > 0 && (
         <audio
           ref={audioRef}
@@ -124,9 +119,9 @@ const Miniplayer: React.FC<MiniplayerPropsTypes> = ({
         <h2 className="text-sm">{songs[indexSong].name}</h2>
 
         <ButtonMoreOptions
-          audioSrc={audioRef.current?.src}
           changeSpeed={changeSpeed}
           playbackRate={playbackRate}
+          song={songs[indexSong]}
         />
       </div>
 
@@ -140,7 +135,7 @@ const Miniplayer: React.FC<MiniplayerPropsTypes> = ({
             min={0}
             max={duration}
             value={currentTime}
-            step="0.1"
+            step="0.8"
             onChange={progressSong}
           />
         </div>
@@ -173,10 +168,6 @@ const Miniplayer: React.FC<MiniplayerPropsTypes> = ({
       </div>
 
       <div className="flex justify-around items-center mt-1 text-2xl">
-        {/* <button title="Embaralhar Playlist" className="p-2" aria-label>
-          <FaShuffle />
-        </button> */}
-
         <button
           className={`${repeatSong && "bg-gray-900"} p-2`}
           onClick={() => setRepeatSong((prev) => !prev)}

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,8 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-import { toast } from "react-toastify";
+import { useUploadSongsByAlbumId } from "@/hooks/useUploadSongsByAlbumId";
 
 interface UploadSongFormProps {
   albumId: string;
@@ -19,84 +17,15 @@ interface UploadSongFormProps {
 
 const UploadSongForm = ({ albumId }: UploadSongFormProps) => {
   const [files, setFiles] = useState<FileList | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const { mutate: uploadSongs, isPending } = useUploadSongsByAlbumId();
 
-  const handleUpload = async () => {
-    let successCount: number = 0;
-
+  const handleUpload = () => {
     if (!files || files.length === 0) {
-      toast.info("Selecione ao menos uma música.");
       return;
     }
 
-    setIsLoading(true);
-
-    for (const file of Array.from(files)) {
-      if (!file.type.startsWith("audio/")) {
-        toast.info(`Arquivo ignorado: ${file.name} não é um áudio.`);
-        console.warn(`Arquivo ignorado: ${file.name} não é um áudio.`);
-        continue;
-      }
-
-      const fileName: string = file.name
-        .trim()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-zA-Z0-9._-]/g, "");
-
-      const filePath: string = `music/${fileName}`;
-
-      const { data: existingSong } = await supabase
-        .from("songs")
-        .select("id")
-        .eq("name", file.name)
-        .eq("album_id", albumId)
-        .maybeSingle();
-
-      if (existingSong) {
-        toast.error("Música já existe.");
-        console.warn(`Música duplicada ignorada: ${file.name}`);
-        continue;
-      }
-
-      const { error: uploadError } = await supabase.storage
-        .from("songs")
-        .upload(filePath, file);
-
-      if (uploadError) {
-        toast.error(`Erro ao enviar ${file.name}: ${uploadError}`);
-        console.error(`Erro ao enviar ${file.name}:`, uploadError);
-        continue;
-      } else {
-        toast.success(`Upload efetuado com sucesso  ${file.name}`);
-        console.log(`Upload efetuado com sucesso  ${file.name}`);
-      }
-
-      const { data: publicUrlData } = supabase.storage
-        .from("songs")
-        .getPublicUrl(filePath);
-
-      const publicUrl = publicUrlData.publicUrl;
-
-      const { error: insertError } = await supabase.from("songs").insert({
-        name: file.name.toString(),
-        url: publicUrl.toString(),
-        filePath: filePath.toString(),
-        album_id: albumId.toString(),
-      });
-
-      if (insertError) {
-        toast.error(`Erro ao salvar no banco: ${insertError}`);
-        console.error("Erro ao salvar no banco:", insertError);
-      } else {
-        successCount++;
-      }
-    }
-
-    toast.info(`Músicas enviadas com sucesso: ${successCount}`);
-
-    setIsLoading(false);
-    setFiles(null);
+    uploadSongs({ files, albumId });
+    setFiles(null); // Limpa o estado após o envio
   };
 
   return (
@@ -108,13 +37,14 @@ const UploadSongForm = ({ albumId }: UploadSongFormProps) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Adicionar músicas ao seu album</DialogTitle>
+          <DialogTitle>Adicionar músicas ao seu álbum</DialogTitle>
           <DialogDescription>
-            O nome da música deve ser único e músicas duplicadas seram
-            ignoradas. Clique em "Salvar" quando terminar.
+            O nome da música deve ser único. Músicas duplicadas serão ignoradas.
+            Clique em "Salvar" quando terminar.
           </DialogDescription>
         </DialogHeader>
-        <form className="space-y-4">
+
+        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
           <Input
             type="file"
             multiple
@@ -127,9 +57,9 @@ const UploadSongForm = ({ albumId }: UploadSongFormProps) => {
             <Button
               type="button"
               onClick={handleUpload}
-              disabled={isLoading || !files?.length}
+              disabled={isPending || !files?.length}
             >
-              {isLoading
+              {isPending
                 ? "Enviando músicas..."
                 : `Salvar ${files?.length || 0} música(s)`}
             </Button>

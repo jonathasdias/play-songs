@@ -1,16 +1,11 @@
 import { useParams } from "react-router";
-import { FaArrowLeftLong, FaPlay } from "react-icons/fa6";
-import { useAlbumByTitle } from "@/hooks/useAlbumByTitle";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { useSongsByAlbumId } from "@/hooks/useSongsByAlbumId";
 import Miniplayer from "@/components/Miniplayer";
 import { useState } from "react";
-import { FaCircleArrowDown } from "react-icons/fa6";
-import { MdDelete } from "react-icons/md";
-import { IoMdAddCircle } from "react-icons/io";
 import UploadSongForm from "@/components/UploadSongForm";
-import { useDeleteSong } from "@/hooks/useDeleteSong";
-import { Song } from "@/types/Song";
 import { toast } from "react-toastify";
+import CardSong from "@/components/CardSong";
 
 type PathParams = {
   albumId: string;
@@ -20,33 +15,17 @@ type PathParams = {
 const MyAlbum: React.FC = () => {
   const { titleAlbum, albumId } = useParams<PathParams>();
 
-  const { data: album, error: albumError } = useAlbumByTitle(titleAlbum!);
-
   const { data: songs, error: songsError } = useSongsByAlbumId(albumId!);
-
-  const { mutate: deleteSong, isPending } = useDeleteSong();
 
   const [indexSongs, setIndexSong] = useState<number>(0);
 
-  if (albumError) {
-    toast.error("Erro ao buscar álbum");
-    console.error("Erro ao buscar álbum:", albumError);
-    return;
-  }
-
   if (songsError) {
-    toast.error("Músicas relacionadas a esse não foram encontradas.");
-    console.error("Erro ao buscar músicas:", songsError);
+    toast.error("Músicas relacionadas a esse album não foram encontradas.");
+    console.error(
+      "Erro ao buscar músicas relacionadas a esse album:",
+      songsError
+    );
   }
-
-  if (!album) return <p>Álbum não encontrado.</p>;
-
-  const handleClick = (song: Song) => {
-    const confirm = window.confirm(`Deseja deletar a música "${song.name}"?`);
-    if (confirm) {
-      deleteSong(song);
-    }
-  };
 
   return (
     <div className="p-4 pb-64 text-white">
@@ -58,12 +37,16 @@ const MyAlbum: React.FC = () => {
         />
       )}
 
-      <FaArrowLeftLong
+      <button
         className="mb-6 text-3xl cursor-pointer"
         title="Voltar para página anterior"
+        aria-label="Voltar para página anterior"
         onClick={() => window.history.back()}
-      />
-      <h1 className="text-4xl font-bold text-center">{album.title}</h1>
+      >
+        <FaArrowLeftLong />
+      </button>
+
+      <h1 className="text-4xl font-bold text-center mb-16">{titleAlbum}</h1>
 
       <div className="mb-6 border-b p-2 flex justify-between items-center">
         <p>Músicas: {songs?.length}</p>
@@ -71,60 +54,22 @@ const MyAlbum: React.FC = () => {
         {albumId && <UploadSongForm albumId={albumId} />}
       </div>
 
-      {songs?.length === 0 ? (
-        <p>Este álbum ainda não possui músicas.</p>
-      ) : (
-        <ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {songs?.map((song, index) => (
-            <li
+      <ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {songs?.length === 0 ? (
+          <p className="text-4xl text-gray-400 text-center font-extrabold p-10 col-span-2 md:col-span-4">
+            Este álbum ainda não possui músicas.
+          </p>
+        ) : (
+          songs?.map((song, index) => (
+            <CardSong
               key={song.id}
-              className={`${
-                isPending && "opacity-5"
-              } border-2 px-2 py-4 rounded-lg shadow flex flex-col justify-between gap-y-2`}
-            >
-              <img
-                src={`https://picsum.photos/600/300?song=${index}`}
-                alt="capa da música"
-              />
-              <p className="font-medium">{song.name}</p>
-              <audio controls src={song.url} className="mt-1 w-full" />
-              <div className="flex justify-between items-center">
-                <button
-                  onClick={() => setIndexSong(index)}
-                  className="size-10 grid place-items-center rounded-full bg-white text-black"
-                  aria-label="selecionar musica"
-                  title="Selecionar musica"
-                >
-                  <FaPlay />
-                </button>
-                <a
-                  href={song.url}
-                  className="text-4xl text-blue-600"
-                  title="Baixar música"
-                  download
-                >
-                  <FaCircleArrowDown />
-                </a>
-                <button
-                  className="size-10 text-2xl grid place-items-center rounded-full text-black bg-destructive"
-                  title="Deletar música"
-                  aria-label="Deletar música"
-                  onClick={() => handleClick(song)}
-                >
-                  <MdDelete />
-                </button>
-                <button
-                  className="text-5xl text-orange-400"
-                  title="adicionar a playlist"
-                  aria-label="adicionar a playlist"
-                >
-                  <IoMdAddCircle />
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+              index={index}
+              setIndexSong={setIndexSong}
+              song={song}
+            />
+          ))
+        )}
+      </ul>
     </div>
   );
 };

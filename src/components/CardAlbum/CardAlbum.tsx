@@ -29,7 +29,11 @@ const CardAlbum = ({ album, index }: CardAlbumProps) => {
   }
 
   return (
-    <li className="bg-gray-800 rounded-lg shadow p-2 sm:p-4 space-y-1">
+    <li
+      className={`${
+        deleteIsPending && "opacity-5"
+      } bg-gray-800 rounded-lg shadow p-2 sm:p-4 space-y-1`}
+    >
       <img
         src={`https://picsum.photos/600/300?album=${index}`}
         alt="Capa do album"
@@ -46,7 +50,6 @@ const CardAlbum = ({ album, index }: CardAlbumProps) => {
           <h2>Músicas: {count}</h2>
         </div>
 
-        {/* no lugar desse botão colocar 3pontinhos dropdow para mostrar opção de deletar e adicionar imagem. */}
         <Button
           className="hover:border-2 border-destructive"
           onClick={() => {

@@ -32,14 +32,15 @@ const Dashboard: React.FC = () => {
           </div>
 
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mx-auto p-4">
-            {albums?.length === 0 && (
-              <p className="text-4xl text-gray-400 text-center font-extrabold p-4">
+            {albums?.length === 0 ? (
+              <p className="text-4xl text-gray-400 text-center font-extrabold p-10 col-span-2">
                 Você não possui nenhum album.
               </p>
+            ) : (
+              albums?.map((album, index) => (
+                <CardAlbum key={album.id} album={album} index={index + 1} />
+              ))
             )}
-            {albums?.map((album, index) => (
-              <CardAlbum key={album.id} album={album} index={index + 1} />
-            ))}
           </ul>
         </section>
       )}

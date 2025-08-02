@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { Song } from "@/types/Song";
+import { toast } from "react-toastify";
 
 export function useSongs() {
   return useQuery<Song[] | null, Error>({
@@ -8,7 +9,11 @@ export function useSongs() {
     queryFn: async () => {
       const { data, error } = await supabase.from("songs").select("*");
 
-      if (error) throw new Error(error.message);
+      if (error) {
+        toast.error("Erro ao buscar músicas: " + error);
+        console.error("Erro ao buscar músicas:", error);
+      }
+
       return data;
     },
   });

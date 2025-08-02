@@ -6,21 +6,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDownloadSong } from "@/hooks/useDownloadSong";
+import { Song } from "@/types/Song";
 import { BsThreeDots } from "react-icons/bs";
-// import { BsThreeDotsVertical } from "react-icons/bs";
-// <BsThreeDotsVertical />
 
 interface ButtonMoreOptionsPropsTypes {
-  audioSrc: string | undefined;
   changeSpeed: (rate: number) => void;
   playbackRate: number;
+  song: Song;
 }
 
 const ButtonMoreOptions: React.FC<ButtonMoreOptionsPropsTypes> = ({
-  audioSrc,
   changeSpeed,
   playbackRate,
+  song,
 }) => {
+  const { mutate: downloadSong, isPending } = useDownloadSong();
+
   const speeds: number[] = [0.5, 0.75, 1, 1.5, 2];
 
   return (
@@ -52,14 +54,17 @@ const ButtonMoreOptions: React.FC<ButtonMoreOptionsPropsTypes> = ({
             ))}
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer" asChild>
-            <a
-              href={audioSrc}
+            <button
+              onClick={() =>
+                downloadSong({ filePath: song.filePath, fileName: song.name })
+              }
+              disabled={isPending}
               title="Baixar música"
               aria-label="Baixar música"
-              download
+              className="w-full"
             >
               Baixar
-            </a>
+            </button>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
