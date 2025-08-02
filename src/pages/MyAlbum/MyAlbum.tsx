@@ -6,6 +6,8 @@ import { useState } from "react";
 import UploadSongForm from "@/components/UploadSongForm";
 import { toast } from "react-toastify";
 import CardSong from "@/components/CardSong";
+import { Button } from "@/components/ui/button";
+import { RiFileTransferFill } from "react-icons/ri";
 
 type PathParams = {
   albumId: string;
@@ -51,7 +53,18 @@ const MyAlbum: React.FC = () => {
       <div className="mb-6 border-b p-2 flex justify-between items-center">
         <p>Músicas: {songs?.length}</p>
 
-        {albumId && <UploadSongForm albumId={albumId} />}
+        <div className="flex items-center flex-nowrap gap-x-2">
+          <Button
+            className="bg-white text-black"
+            title="Transferir musicas para"
+            aria-label="Transferir musicas para"
+            variant="secondary"
+          >
+            <RiFileTransferFill />
+          </Button>
+
+          {albumId && <UploadSongForm albumId={albumId} />}
+        </div>
       </div>
 
       <ul className="grid grid-cols-2 md:grid-cols-4 gap-4">

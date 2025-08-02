@@ -31,8 +31,13 @@ const UploadSongForm = ({ albumId }: UploadSongFormProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-white text-black" variant="secondary">
-          + Adicionar Músicas
+        <Button
+          className="bg-white text-black"
+          title="Adicionar músicas"
+          aria-label="Adicionar Músicas"
+          variant="secondary"
+        >
+          + Adicionar
         </Button>
       </DialogTrigger>
       <DialogContent>
