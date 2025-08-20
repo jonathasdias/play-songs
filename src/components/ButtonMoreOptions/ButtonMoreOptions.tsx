@@ -7,21 +7,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDownloadSong } from "@/hooks/useDownloadSong";
+import { useSongPlayerContext } from "@/hooks/useSongPlayerContext";
 import { Song } from "@/types/Song";
 import { BsThreeDots } from "react-icons/bs";
 
 interface ButtonMoreOptionsPropsTypes {
-  changeSpeed: (rate: number) => void;
-  playbackRate: number;
   song: Song;
 }
 
-const ButtonMoreOptions: React.FC<ButtonMoreOptionsPropsTypes> = ({
-  changeSpeed,
-  playbackRate,
-  song,
-}) => {
+const ButtonMoreOptions: React.FC<ButtonMoreOptionsPropsTypes> = ({ song }) => {
   const { mutate: downloadSong, isPending } = useDownloadSong();
+
+  const { playbackRate, changeSpeed } = useSongPlayerContext();
 
   const speeds: number[] = [0.5, 0.75, 1, 1.5, 2];
 
@@ -38,12 +35,12 @@ const ButtonMoreOptions: React.FC<ButtonMoreOptionsPropsTypes> = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64" align="end">
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="py-2">
             {speeds.map((rate) => (
               <button
                 key={rate}
                 onClick={() => changeSpeed(rate)}
-                className={`px-2 py-1 rounded border text-sm ${
+                className={`px-2 py-1 rounded border font-semibold text-sm ${
                   playbackRate === rate
                     ? "bg-blue-500 text-white"
                     : "bg-white text-black"
@@ -53,7 +50,7 @@ const ButtonMoreOptions: React.FC<ButtonMoreOptionsPropsTypes> = ({
               </button>
             ))}
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer" asChild>
+          <DropdownMenuItem className="cursor-pointer py-2 font-bold" asChild>
             <button
               onClick={() =>
                 downloadSong({ filePath: song.filePath, fileName: song.name })

@@ -6,17 +6,19 @@ import { useDeleteSong } from "@/hooks/useDeleteSong";
 import { Song } from "@/types/Song";
 import { useDownloadSong } from "@/hooks/useDownloadSong";
 import { Button } from "../ui/button";
+import { useSongPlayerContext } from "@/hooks/useSongPlayerContext";
 
 interface CardSongPropsTypes {
   song: Song;
-  setIndexSong: React.Dispatch<React.SetStateAction<number>>;
   index: number;
 }
 
-const CardSong = ({ song, setIndexSong, index }: CardSongPropsTypes) => {
+const CardSong = ({ song, index }: CardSongPropsTypes) => {
   const { mutate: deleteSong, isPending } = useDeleteSong();
 
   const { mutate: downloadSong } = useDownloadSong();
+
+  const { playSong } = useSongPlayerContext();
 
   const handleClick = (song: Song) => {
     const confirm = window.confirm(`Deseja deletar a música "${song.name}"?`);
@@ -40,7 +42,7 @@ const CardSong = ({ song, setIndexSong, index }: CardSongPropsTypes) => {
 
       <div className="grid grid-cols-2 md:grid-cols-4 justify-items-center items-center gap-6 md:gap-3">
         <Button
-          onClick={() => setIndexSong(index)}
+          onClick={() => playSong(index)}
           className="size-10 grid place-items-center rounded-full bg-white text-black"
           aria-label="selecionar musica"
           title="Selecionar musica"

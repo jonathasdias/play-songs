@@ -2,7 +2,6 @@ import { useParams } from "react-router";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useSongsByAlbumId } from "@/hooks/useSongsByAlbumId";
 import Miniplayer from "@/components/Miniplayer";
-import { useState } from "react";
 import UploadSongForm from "@/components/UploadSongForm";
 import { toast } from "react-toastify";
 import CardSong from "@/components/CardSong";
@@ -19,8 +18,6 @@ const MyAlbum: React.FC = () => {
 
   const { data: songs, error: songsError } = useSongsByAlbumId(albumId!);
 
-  const [indexSongs, setIndexSong] = useState<number>(0);
-
   if (songsError) {
     toast.error("Músicas relacionadas a esse album não foram encontradas.");
     console.error(
@@ -31,13 +28,7 @@ const MyAlbum: React.FC = () => {
 
   return (
     <div className="p-4 pb-64 text-white">
-      {songs && (
-        <Miniplayer
-          songs={songs!}
-          indexSong={indexSongs!}
-          setIndexSong={setIndexSong}
-        />
-      )}
+      {songs && songs.length > 0 && <Miniplayer songs={songs!} />}
 
       <button
         className="mb-6 text-3xl cursor-pointer"
@@ -74,12 +65,7 @@ const MyAlbum: React.FC = () => {
           </p>
         ) : (
           songs?.map((song, index) => (
-            <CardSong
-              key={song.id}
-              index={index}
-              setIndexSong={setIndexSong}
-              song={song}
-            />
+            <CardSong key={song.id} index={index} song={song} />
           ))
         )}
       </ul>

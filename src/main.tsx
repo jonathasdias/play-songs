@@ -10,6 +10,7 @@ import MyPlaylist from "./pages/MyPlaylist";
 import MyAlbum from "./pages/MyAlbum/MyAlbum.tsx";
 import PrivatePage from "./auth/PrivatePage.tsx";
 import DashboardMusicsAnterior from "./pages/DashboardMusicsAnterior/DashboardMusicsAnterior.tsx";
+import { SongPlayerProvider } from "./contexts/contextSong/SongPlayerProvider.tsx";
 
 const queryClient = new QueryClient();
 
@@ -41,8 +42,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <SongPlayerProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </SongPlayerProvider>
   </StrictMode>
 );
