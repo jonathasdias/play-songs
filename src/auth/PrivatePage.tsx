@@ -16,7 +16,7 @@ const PrivatePage = ({ Component }: PrivatePageProps) => {
 
   if (isLoading)
     return (
-      <div className="grid place-items-center h-96 text-4xl text-white mx-auto mt-2">
+      <div className="grid place-items-center h-96 text-4xl text-white text-center mx-auto mt-2">
         <p>Verificando autenticação.</p>
         <Loading />
       </div>

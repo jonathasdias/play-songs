@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import CardSong from "@/components/CardSong";
 import { Button } from "@/components/ui/button";
 import { RiFileTransferFill } from "react-icons/ri";
+import { useStorageUsage } from "@/hooks/useStorageUsage";
+import { formatBytes } from "@/utils/formatBytes";
 
 type PathParams = {
   albumId: string;
@@ -17,6 +19,8 @@ const MyAlbum: React.FC = () => {
   const { titleAlbum, albumId } = useParams<PathParams>();
 
   const { data: songs, error: songsError } = useSongsByAlbumId(albumId!);
+
+  const { data: storageUsage } = useStorageUsage("songs");
 
   if (songsError) {
     toast.error("Músicas relacionadas a esse album não foram encontradas.");
@@ -42,7 +46,19 @@ const MyAlbum: React.FC = () => {
       <h1 className="text-4xl font-bold text-center mb-16">{titleAlbum}</h1>
 
       <div className="mb-6 border-b p-2 flex justify-between items-center">
-        <p>Músicas: {songs?.length}</p>
+        <div
+          className="flex flex-col md:flex-row justify-between gap-y-1 gap-x-4"
+          aria-label="informações do album"
+        >
+          <p>
+            <strong>Músicas:</strong> {songs?.length}
+          </p>
+
+          <p>
+            <strong>Usado:</strong>{" "}
+            {formatBytes(Number(storageUsage?.totalBytes))}
+          </p>
+        </div>
 
         <div className="flex items-center flex-nowrap gap-x-2">
           <Button

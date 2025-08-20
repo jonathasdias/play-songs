@@ -137,7 +137,7 @@ export const SongPlayerProvider = ({
   return (
     <SongPlayerContext.Provider value={valueContext}>
       {children}
-      <audio ref={audioRef} src={""} />
+      <audio ref={audioRef} />
     </SongPlayerContext.Provider>
   );
 };
