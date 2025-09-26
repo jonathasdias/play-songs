@@ -32,7 +32,7 @@ const MyAlbum: React.FC = () => {
   }
 
   return (
-    <div className="p-4 pb-64 text-white">
+    <div className="px-2 pt-2 pb-52 md:pb-52 md:p-4 text-white">
       {songs && songs.length > 0 && <Miniplayer songs={songs!} />}
 
       <button
@@ -76,7 +76,7 @@ const MyAlbum: React.FC = () => {
         </div>
       </div>
 
-      <ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <ul className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {songs?.length === 0 ? (
           <p className="text-4xl text-gray-400 text-center font-extrabold p-10 col-span-2 md:col-span-4">
             Este álbum ainda não possui músicas.

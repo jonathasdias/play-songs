@@ -31,7 +31,7 @@ const Miniplayer: React.FC<MiniplayerPropsTypes> = ({ songs }) => {
   } = useSongPlayerContext();
 
   return (
-    <div className="border-t-2 bg-gray-950 fixed bottom-0 left-0 right-0 z-10 p-2 flex flex-col gap-y-4">
+    <div className="border-t-2 bg-gray-950 fixed bottom-0 left-0 right-0 z-10 p-2 flex flex-col gap-y-1">
       {songs.length > 0 && (
         <audio
           ref={audioRef}
@@ -43,8 +43,10 @@ const Miniplayer: React.FC<MiniplayerPropsTypes> = ({ songs }) => {
         ></audio>
       )}
 
-      <div className="flex justify-between items-center">
-        <h2 className="text-sm">{songs[indexSong].name}</h2>
+      <div className="flex justify-between items-center gap-x-1">
+        <h2 className="text-[12px] md:text-sm truncate">
+          {songs[indexSong].name}
+        </h2>
 
         <ButtonMoreOptions song={songs[indexSong]} />
       </div>
