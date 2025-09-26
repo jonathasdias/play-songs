@@ -36,6 +36,7 @@ const CardSong = ({ song, index }: CardSongPropsTypes) => {
       <img
         src={`https://picsum.photos/600/300?song=${index}`}
         alt="capa da música"
+        className="h-[149px] bg-gray-950"
       />
 
       <p className="text-sm font-medium break-words">{song.name}</p>

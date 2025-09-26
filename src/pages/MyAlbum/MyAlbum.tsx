@@ -20,7 +20,8 @@ const MyAlbum: React.FC = () => {
 
   const { data: songs, error: songsError } = useSongsByAlbumId(albumId!);
 
-  const { data: storageUsage } = useStorageUsage("songs");
+  const { data: storageUsage, isLoading: storageUsageloading } =
+    useStorageUsage("songs");
 
   if (songsError) {
     toast.error("Músicas relacionadas a esse album não foram encontradas.");
@@ -56,7 +57,8 @@ const MyAlbum: React.FC = () => {
 
           <p>
             <strong>Usado:</strong>{" "}
-            {formatBytes(Number(storageUsage?.totalBytes))}
+            {!storageUsageloading &&
+              formatBytes(Number(storageUsage?.totalBytes))}
           </p>
         </div>
 
