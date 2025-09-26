@@ -32,7 +32,7 @@ const MyAlbum: React.FC = () => {
   }
 
   return (
-    <div className="px-2 pt-2 pb-52 md:pb-52 md:p-4 text-white">
+    <div className="px-2 pt-2 pb-48 md:pb-52 md:p-4 text-white">
       {songs && songs.length > 0 && <Miniplayer songs={songs!} />}
 
       <button

@@ -59,15 +59,15 @@ const Miniplayer: React.FC<MiniplayerPropsTypes> = ({ songs }) => {
             max={duration}
             step={0.8}
             onValueChange={progressSong}
-            className="w-full py-4 cursor-pointer"
+            className="w-full h-1 md:h-auto py-4 cursor-pointer"
           >
-            <SliderTrack className="bg-gray-700">
-              <SliderRange className="bg-blue-500" />
+            <SliderTrack>
+              <SliderRange />
             </SliderTrack>
-            <SliderThumb className="bg-white w-4 h-4" />
+            <SliderThumb />
           </Slider>
         </div>
-        <div className="flex justify-between px-4">
+        <div className="flex justify-between px-4 text-sm">
           <span>{formatSeconds(currentTime)}</span>
           <span>{formatSeconds(duration)}</span>
         </div>

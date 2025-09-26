@@ -36,18 +36,18 @@ const CardSong = ({ song, index }: CardSongPropsTypes) => {
       <img
         src={`https://picsum.photos/600/300?song=${index}`}
         alt="capa da música"
-        className="h-14 md:h-[149px] bg-gray-950"
+        className="h-14 w-32 md:w-full md:h-[149px] bg-gray-950"
       />
 
       <div className="w-full text-center space-y-2 md:space-y-6">
-        <p className="text-[10px] md:text-sm font-medium break-word line-clamp-2">
+        <p className="text-[12px] md:text-sm font-medium break-word line-clamp-2">
           {song.name}
         </p>
 
         <div className="grid grid-cols-4 justify-items-center items-center gap-3">
           <Button
             onClick={() => playSong(index)}
-            className="size-8 md:size-10 grid place-items-center rounded-full bg-white text-black"
+            className="size-9 md:size-10 grid place-items-center rounded-full bg-white text-black"
             aria-label="selecionar musica"
             title="Selecionar musica"
             variant="secondary"
@@ -55,7 +55,7 @@ const CardSong = ({ song, index }: CardSongPropsTypes) => {
             <FaPlay />
           </Button>
           <Button
-            className="size-8 md:size-10 text-blue-600"
+            className="size-9 md:size-10 text-blue-600"
             title="Baixar música"
             aria-label="Baixar música"
             variant="secondary"
@@ -69,7 +69,7 @@ const CardSong = ({ song, index }: CardSongPropsTypes) => {
             <FaCircleArrowDown />
           </Button>
           <Button
-            className="size-8 md:size-10 text-2xl grid place-items-center rounded-full text-black hover:bg-destructive"
+            className="size-9 md:size-10 text-2xl grid place-items-center rounded-full text-black hover:bg-destructive"
             title="Deletar música"
             aria-label="Deletar música"
             variant="secondary"
@@ -78,7 +78,7 @@ const CardSong = ({ song, index }: CardSongPropsTypes) => {
             <MdDelete />
           </Button>
           <Button
-            className="size-8 md:size-10 text-orange-400"
+            className="size-9 md:size-10 text-orange-400"
             title="adicionar a playlist"
             aria-label="adicionar a playlist"
             variant="secondary"
