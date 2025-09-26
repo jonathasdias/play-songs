@@ -30,7 +30,7 @@ const ButtonAddAlbum: React.FC = () => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="text-black">
-            Criar album &#10009;
+            + Criar album
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
@@ -49,7 +49,7 @@ const ButtonAddAlbum: React.FC = () => {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button variant="outline" className="text-black">
-          Criar album &#10009;
+          + Criar album
         </Button>
       </DrawerTrigger>
       <DrawerContent>

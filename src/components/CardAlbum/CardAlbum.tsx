@@ -35,9 +35,9 @@ const CardAlbum = ({ album, index }: CardAlbumProps) => {
       } bg-gray-800 rounded-lg shadow p-2 sm:p-4 space-y-1`}
     >
       <img
-        src={`https://picsum.photos/600/300?album=${index}`}
+        src={`https://picsum.photos/600/200?album=${index}`}
         alt="Capa do album"
-        className="h-[300px] w-full bg-gray-950"
+        className="h-[200px] w-full bg-gray-950"
       />
 
       <div className="flex justify-between items-center">

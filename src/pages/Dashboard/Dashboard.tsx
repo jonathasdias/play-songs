@@ -31,7 +31,7 @@ const Dashboard: React.FC = () => {
             <ButtonAddAlbum />
           </div>
 
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mx-auto p-4">
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mx-auto px-1 py-4 md:p-4">
             {albums?.length === 0 ? (
               <p className="text-4xl text-gray-400 text-center font-extrabold p-10 col-span-2">
                 Você não possui nenhum album.
