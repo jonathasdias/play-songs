@@ -30,6 +30,7 @@ export const useDeleteSong = () => {
     onSuccess: (_, song) => {
       toast.success(`Música "${song.name}" deletada com sucesso.`);
       queryClient.invalidateQueries({ queryKey: ["songsByAlbumId"] });
+      queryClient.invalidateQueries({ queryKey: ["storage-usage"] });
     },
     onError: (error: Error) => {
       toast.error(error.message);

@@ -7,13 +7,16 @@ import { Song } from "@/types/Song";
 import { useDownloadSong } from "@/hooks/useDownloadSong";
 import { Button } from "../ui/button";
 import { useSongPlayerContext } from "@/hooks/useSongPlayerContext";
+import DialogTransferSongs from "../DialogTransferSongs";
+import { Album } from "@/types/Album";
 
 interface CardSongPropsTypes {
   song: Song;
   index: number;
+  albums: Album[];
 }
 
-const CardSong = ({ song, index }: CardSongPropsTypes) => {
+const CardSong = ({ song, index, albums }: CardSongPropsTypes) => {
   const { mutate: deleteSong, isPending } = useDeleteSong();
 
   const { mutate: downloadSong } = useDownloadSong();
@@ -43,6 +46,8 @@ const CardSong = ({ song, index }: CardSongPropsTypes) => {
         <p className="text-[12px] md:text-sm font-medium break-word line-clamp-2">
           {song.name}
         </p>
+
+        <DialogTransferSongs albums={albums!} songId={song.id} />
 
         <div className="grid grid-cols-4 justify-items-center items-center gap-3">
           <Button

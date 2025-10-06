@@ -77,6 +77,7 @@ export const useUploadSongsByAlbumId = () => {
       toast.success(`Músicas enviadas com sucesso: ${successCount}`);
       // Atualiza a lista de músicas no cache
       queryClient.invalidateQueries({ queryKey: ["songsByAlbumId"] });
+      queryClient.invalidateQueries({ queryKey: ["storage-usage"] });
     },
     onError: (error) => {
       toast.error("Erro inesperado ao enviar músicas.");

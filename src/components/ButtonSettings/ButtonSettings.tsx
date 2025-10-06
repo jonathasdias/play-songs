@@ -41,6 +41,7 @@ const ButtonSettings: React.FC = () => {
             Github
           </a>
         </DropdownMenuItem>
+        <DropdownMenuItem>Feedback</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout} className="text-red-500 font-bold">
           Sair da Conta

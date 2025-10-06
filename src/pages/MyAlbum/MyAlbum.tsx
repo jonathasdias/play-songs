@@ -5,10 +5,10 @@ import Miniplayer from "@/components/Miniplayer";
 import UploadSongForm from "@/components/UploadSongForm";
 import { toast } from "react-toastify";
 import CardSong from "@/components/CardSong";
-import { Button } from "@/components/ui/button";
-import { RiFileTransferFill } from "react-icons/ri";
 import { useStorageUsage } from "@/hooks/useStorageUsage";
 import { formatBytes } from "@/utils/formatBytes";
+import { useAllAlbums } from "@/hooks/useAllAlbums";
+import DialogTransferSongs from "@/components/DialogTransferSongs";
 
 type PathParams = {
   albumId: string;
@@ -19,6 +19,7 @@ const MyAlbum: React.FC = () => {
   const { titleAlbum, albumId } = useParams<PathParams>();
 
   const { data: songs, error: songsError } = useSongsByAlbumId(albumId!);
+  const { data: albums } = useAllAlbums();
 
   const { data: storageUsage, isLoading: storageUsageloading } =
     useStorageUsage("songs");
@@ -63,14 +64,7 @@ const MyAlbum: React.FC = () => {
         </div>
 
         <div className="flex items-center flex-nowrap gap-x-2">
-          <Button
-            className="bg-white text-black"
-            title="Transferir musicas para"
-            aria-label="Transferir musicas para"
-            variant="secondary"
-          >
-            <RiFileTransferFill />
-          </Button>
+          <DialogTransferSongs albums={albums!} fromAlbumId={albumId} />
 
           {albumId && <UploadSongForm albumId={albumId} />}
         </div>
@@ -83,7 +77,12 @@ const MyAlbum: React.FC = () => {
           </p>
         ) : (
           songs?.map((song, index) => (
-            <CardSong key={song.id} index={index} song={song} />
+            <CardSong
+              key={song.id}
+              index={index}
+              song={song}
+              albums={albums!}
+            />
           ))
         )}
       </ul>
